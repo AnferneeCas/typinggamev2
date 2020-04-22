@@ -1,3 +1,4 @@
 //AUTH TYPES
 
 export const GET_AUTHSTATE = "GET_AUTHSTATE";
+export const SET_AUTHSTATE = "SET_AUTHSTATE";

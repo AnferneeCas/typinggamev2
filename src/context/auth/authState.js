@@ -1,19 +1,30 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import authReducer from "./authReducer.js";
 import authContext from "./authContext.js";
-import { GET_AUTHSTATE } from "../types";
+import { GET_AUTHSTATE, SET_AUTHSTATE } from "../types";
 const AuthState = (props) => {
-  console.log(authContext);
-  const initialState = { username: "null" };
+  const initialState = { username: null };
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  //check if user has userbname in localstorage
+  useEffect(() => {
+    getAuthState();
+    console.log("se llama getAuhState");
+  }, []);
   //get authstate from localstorage
-  const getAuthState = () => {};
+  const getAuthState = () => {
+    var username = localStorage.getItem("auth");
+
+    dispatch({
+      type: GET_AUTHSTATE,
+      payload: username,
+    });
+  };
 
   //set authstate to local storage
   const setAuthState = (username) => {
     dispatch({
-      type: GET_AUTHSTATE,
+      type: SET_AUTHSTATE,
       payload: username,
     });
   };

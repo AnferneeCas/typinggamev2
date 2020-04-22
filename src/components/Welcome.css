@@ -1,0 +1,15 @@
+.main {
+  position: absolute; /*position: fixed;*/
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #29293a;
+}
+
+.header {
+  color: white;
+  font-size: 5vw;
+  text-align: center;
+  margin-top: 5%;
+}
