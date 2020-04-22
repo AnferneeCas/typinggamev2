@@ -12,6 +12,7 @@ export default (state, action) => {
       return {
         ...state,
         username: action.payload,
+        checked: true,
       };
 
     default:

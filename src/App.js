@@ -1,12 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+//COMPONENTES
 import Welcome from "./components/Welcome";
+import Menu from "./components/Menu";
+import LoadingAnimation from "./components/LoadingAnimation";
+//context
 import authContext from "./context/auth/authContext";
 function App() {
-  const { username } = useContext(authContext);
-  console.log(username);
+  const { username, getAuthState, checked } = useContext(authContext);
+  var renderingComponent = null;
 
-  var renderingComponent = username !== null ? Welcome : Welcome;
+  //wait for getAuthState to run
+  if (checked === false) {
+    //loading animation
+    renderingComponent = LoadingAnimation;
+  } else {
+    renderingComponent = username !== null ? Menu : Welcome;
+  }
+
   return (
     <Router>
       <Switch>

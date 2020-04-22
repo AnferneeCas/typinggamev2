@@ -13,3 +13,15 @@
   text-align: center;
   margin-top: 5%;
 }
+.banner {
+  background-color: #41836e;
+  height: 250px;
+}
+
+.container-form {
+  height: inherit !important;
+}
+.row-form {
+  width: inherit !important;
+  justify-content: center;
+}

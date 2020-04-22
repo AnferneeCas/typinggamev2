@@ -3,7 +3,7 @@ import authReducer from "./authReducer.js";
 import authContext from "./authContext.js";
 import { GET_AUTHSTATE, SET_AUTHSTATE } from "../types";
 const AuthState = (props) => {
-  const initialState = { username: null };
+  const initialState = { username: null, checked: false };
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   //check if user has userbname in localstorage
@@ -30,7 +30,12 @@ const AuthState = (props) => {
   };
   return (
     <authContext.Provider
-      value={{ username: state.username, getAuthState, setAuthState }}
+      value={{
+        username: state.username,
+        getAuthState,
+        setAuthState,
+        checked: state.checked,
+      }}
     >
       {props.children}
     </authContext.Provider>

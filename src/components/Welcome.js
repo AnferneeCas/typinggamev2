@@ -6,24 +6,29 @@ const Welcome = () => {
   const [user, setUser] = useState(null);
   console.log(username);
   const onButtonClick = (e) => {
-    setAuthState();
+    e.preventDefault();
+
+    setAuthState(user);
   };
 
   return (
     <div className="main">
       <div className="header">TYPING GAME</div>
-      <div className="jumbotron jumbotron-fluid">
-        <div className="container">
-          <div className="row ">
-            <div className=" col-xs-12 col-sm-12 col-md-6  align-self-center">
+      <div className="banner">
+        <div className="container container-form d-flex justify-content-center">
+          <div className="row align-self-center row-form ">
+            <div className=" col-xs-12 col-sm-12 col-md-6  ">
               <h1 className="display-4">Write your username</h1>
             </div>
-            <div className=" col-xs-12 col-sm-12 col-md-4 align-self-center">
+            <div
+              className=" col-xs-12 col-sm-12 col-md-4 "
+              style={{ paddingTop: "20px" }}
+            >
               <form>
                 <span className="input-group">
                   <input
                     onChange={(e) => {
-                      setUser();
+                      setUser(e.target.value);
                     }}
                     type="text"
                     className="form-control"
@@ -33,7 +38,11 @@ const Welcome = () => {
                     required
                   ></input>
                   <span className="input-group-append">
-                    <button type="submit" className="btn btn-outline-secondary">
+                    <button
+                      type="submit"
+                      className="btn btn-info"
+                      onClick={onButtonClick}
+                    >
                       Play
                     </button>
                   </span>
