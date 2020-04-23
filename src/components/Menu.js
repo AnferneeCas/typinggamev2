@@ -3,23 +3,27 @@ import React, { useContext, useState } from "react";
 import "./Menu.css";
 //context
 import authContext from "../context/auth/authContext";
-
+import menusContext from "../context/menus/menusContext";
 //components
-import LoadingAnimation from "./LoadingAnimation";
+import MainMenu from "./MainMenu";
+import MenuCreateLobby from "./MenuCreateLobby";
+
 const Menu = () => {
   var AuthContext = useContext(authContext);
   var { username } = AuthContext;
 
-  var [lookingForLobby, setLookingForLobby] = useState(false);
-  const onClickJoinLobby = () => {};
-  const onClickSearchForLobby = () => {
-    setLookingForLobby(true);
-  };
-  const onClickCreateLobby = () => {};
+  var MenusContext = useContext(menusContext);
+  var { mainMenu, createLobby, searchLobby, joinLobby } = MenusContext;
 
-  return lookingForLobby ? (
-    <LoadingAnimation></LoadingAnimation>
-  ) : (
+  var LoadingComponent = null;
+
+  if (createLobby === true) {
+    LoadingComponent = <MenuCreateLobby></MenuCreateLobby>;
+  } else if (mainMenu === true) {
+    LoadingComponent = <MainMenu></MainMenu>;
+  }
+
+  return (
     <div className="main d-flex justify-content-center">
       <div className="headerMenu">TYPING GAME</div>
       <div className="align-self-center menu rounded">
@@ -29,35 +33,7 @@ const Menu = () => {
         >
           Are you ready to type {username} ?
         </div>
-        <div className="container  d-flex justify-content-center ">
-          <div className="button-container align-self-center">
-            <div className="row  ">
-              <div className="col-12">
-                <button type="button" class="btn btn-outline-light">
-                  Join Lobby
-                </button>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-12">
-                <button
-                  type="button"
-                  class="btn btn-outline-light"
-                  onClick={onClickSearchForLobby}
-                >
-                  Search for a lobby
-                </button>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-12">
-                <button type="button" class="btn btn-outline-light">
-                  Create lobby
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {LoadingComponent}
       </div>
     </div>
   );

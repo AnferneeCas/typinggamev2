@@ -5,8 +5,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Welcome from "./components/Welcome";
 import Menu from "./components/Menu";
 import LoadingAnimation from "./components/LoadingAnimation";
+import Playground from "./components/Playground";
 //context
 import authContext from "./context/auth/authContext";
+import MenusState from "./context/menus/menusState";
 function App() {
   const { username, getAuthState, checked } = useContext(authContext);
   var renderingComponent = null;
@@ -20,11 +22,14 @@ function App() {
   }
 
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={renderingComponent} />
-      </Switch>
-    </Router>
+    <MenusState>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={renderingComponent} />
+          <Route exact path="/game/*" component={Playground} />
+        </Switch>
+      </Router>
+    </MenusState>
   );
 }
 

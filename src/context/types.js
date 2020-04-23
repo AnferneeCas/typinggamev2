@@ -2,3 +2,10 @@
 
 export const GET_AUTHSTATE = "GET_AUTHSTATE";
 export const SET_AUTHSTATE = "SET_AUTHSTATE";
+
+//menu types
+
+export const SHOW_CREATE_LOBBY = "SHOW_CREATE_LOBBY";
+export const SHOW_SEARCH_LOBBY = "SHOW_SEARCH_LOBBY";
+export const SHOW_JOIN_LOBBY = "SHOW_JOIN_LOBBY";
+export const SHOW_MAIN_MENU = "SHOW_MAIN_MENU";
