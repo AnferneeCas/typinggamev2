@@ -2,10 +2,10 @@ import React, { useContext, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //COMPONENTES
-import Welcome from "./components/Welcome";
-import Menu from "./components/Menu";
-import LoadingAnimation from "./components/LoadingAnimation";
-import Playground from "./components/Playground";
+import Welcome from "./Components/Welcome";
+import Menu from "./Components/Menu";
+import LoadingAnimation from "./Components/LoadingAnimation";
+import Playground from "./Components/Playground";
 //context
 import authContext from "./context/auth/authContext";
 import MenusState from "./context/menus/menusState";

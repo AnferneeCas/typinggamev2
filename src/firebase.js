@@ -3,10 +3,10 @@ import "firebase/auth";
 import "firebase/database";
 
 const config = {
-  apiKey: "AIzaSyAO7Opd3kKUYrHS32RfwXVJTcsv7BAzoxg",
-  authDomain: "typinggamev2.firebaseapp.com",
-  databaseURL: "https://typinggamev2.firebaseio.com/",
-  storageBucket: "typinggamev2",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DB_URL,
+  storageBucket: process.env.REACT_APP_PROJECT_ID,
 };
 
 class Firebase {
@@ -14,6 +14,11 @@ class Firebase {
     firebase.initializeApp(config);
     this.auth = firebase.auth();
     this.db = firebase.database();
+    // this.status = {
+    //   waiting: 0,
+    //   started: 1,
+    //   finished: 2,
+    // };
   }
 }
 
