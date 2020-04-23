@@ -1,5 +1,5 @@
 import React from "react";
-const LoadingAnimation = () => {
+const LoadingAnimation = (props) => {
   return (
     <div className="main d-flex justify-content-center ">
       <div

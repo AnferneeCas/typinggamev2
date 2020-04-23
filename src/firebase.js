@@ -21,14 +21,23 @@ class Firebase {
     // };
   }
 
-  async queuePlayer(player) {
-    await this.db
+  async queuePlayer(player, props) {
+    let algo = await this.db
       .ref("queue/")
       .push({
         name: player,
       })
+
       .then((res) => {
         res.ref.onDisconnect().remove();
+        res.ref.on("value", (snapshot) => {
+          let returnState = snapshot.val();
+          console.log(returnState.lobby);
+          if (returnState.lobby != undefined) {
+            console.log("entre");
+            props.history.push(`/game/${returnState.lobby}`);
+          }
+        });
       })
       .catch((e) => {
         alert(e);

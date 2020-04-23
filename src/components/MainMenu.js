@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
+import { withRouter } from "react-router-dom";
 //context
 import authContext from "../context/auth/authContext";
 import menusContext from "../context/menus/menusContext";
 //components
 import firebase from "../firebase";
-const MainMenu = () => {
+const MainMenu = (props) => {
   var AuthContext = useContext(authContext);
   var { username } = AuthContext;
 
@@ -21,7 +22,7 @@ const MainMenu = () => {
   const onClickJoinLobby = () => {
     showJoinLobby(true);
     const player = localStorage.getItem("auth");
-    firebase.queuePlayer(player);
+    firebase.queuePlayer(player, props);
   };
   const onClickSearchForLobby = () => {
     showSearchLobby(true);
@@ -71,4 +72,4 @@ const MainMenu = () => {
   );
 };
 
-export default MainMenu;
+export default withRouter(MainMenu);
