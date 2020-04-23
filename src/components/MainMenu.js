@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import authContext from "../context/auth/authContext";
 import menusContext from "../context/menus/menusContext";
 //components
+import firebase from "../firebase";
 const MainMenu = () => {
   var AuthContext = useContext(authContext);
   var { username } = AuthContext;
@@ -19,6 +20,8 @@ const MainMenu = () => {
   var [lookingForLobby, setLookingForLobby] = useState(false);
   const onClickJoinLobby = () => {
     showJoinLobby(true);
+    const player = localStorage.getItem("auth");
+    firebase.queuePlayer(player);
   };
   const onClickSearchForLobby = () => {
     showSearchLobby(true);

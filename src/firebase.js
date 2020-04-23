@@ -20,6 +20,20 @@ class Firebase {
     //   finished: 2,
     // };
   }
+
+  async queuePlayer(player) {
+    await this.db
+      .ref("queue/")
+      .push({
+        name: player,
+      })
+      .then((res) => {
+        res.ref.onDisconnect().remove();
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  }
 }
 
 export default new Firebase();
