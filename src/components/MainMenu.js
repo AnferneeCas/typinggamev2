@@ -17,7 +17,9 @@ const MainMenu = () => {
   } = MenusContext;
 
   var [lookingForLobby, setLookingForLobby] = useState(false);
-  const onClickJoinLobby = () => {};
+  const onClickJoinLobby = () => {
+    showJoinLobby(true);
+  };
   const onClickSearchForLobby = () => {
     showSearchLobby(true);
   };
@@ -30,7 +32,11 @@ const MainMenu = () => {
       <div className="button-container align-self-center">
         <div className="row  ">
           <div className="col-12">
-            <button type="button" className="btn btn-outline-light">
+            <button
+              type="button"
+              className="btn btn-outline-light"
+              onClick={onClickJoinLobby}
+            >
               Join Lobby
             </button>
           </div>

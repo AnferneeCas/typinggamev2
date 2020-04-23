@@ -7,6 +7,7 @@ import menusContext from "../context/menus/menusContext";
 //components
 import MainMenu from "./MainMenu";
 import MenuCreateLobby from "./MenuCreateLobby";
+import LoadingAnimation from "./LoadingAnimation";
 
 const Menu = () => {
   var AuthContext = useContext(authContext);
@@ -22,6 +23,10 @@ const Menu = () => {
   } else if (mainMenu === true) {
     LoadingComponent = <MainMenu></MainMenu>;
   }
+
+  joinLobby == true
+    ? (LoadingComponent = <LoadingAnimation></LoadingAnimation>)
+    : (LoadingComponent = <MainMenu></MainMenu>);
 
   return (
     <div className="main d-flex justify-content-center">

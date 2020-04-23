@@ -1,5 +1,5 @@
 import React from "react";
-const LaodingAnimation = () => {
+const LoadingAnimation = () => {
   return (
     <div className="main d-flex justify-content-center ">
       <div
@@ -13,4 +13,4 @@ const LaodingAnimation = () => {
   );
 };
 
-export default LaodingAnimation;
+export default LoadingAnimation;
