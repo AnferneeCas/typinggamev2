@@ -19,8 +19,10 @@ const Playground = (props) => {
   var [quote, setQuote] = useState(null);
   var [bothText, setBothText] = useState("");
   var [gameQuote, setGameQuote] = useState(null);
-  var [gameTextPlayer1, setGameTextPlayer1] = useState(null);
-  var [gameTextPlayer2, setGameTextPlayer2] = useState(null);
+  var [gameTextPlayer1, setGameTextPlayer1] = useState("");
+  var [gameTextPlayer2, setGameTextPlayer2] = useState("");
+  var [goodTextPlayer1, setGoodTextPlayer1] = useState("");
+  var [goodTextPlayer2, setGoodTextPlayer2] = useState("");
   useEffect(() => {
     if (username !== null) {
       var game = firebase.db
@@ -97,91 +99,78 @@ const Playground = (props) => {
       gameTextPlayer2 != null &&
       gameQuote != null
     ) {
-      if (gameTextPlayer1.length >= gameTextPlayer2.length) {
-        var both = "";
-        var goodText = "";
-        for (let index = 0; index <= gameTextPlayer1.length; index++) {
-          if (
-            gameTextPlayer1.charAt(index) == gameTextPlayer2.charAt(index) &&
-            gameTextPlayer1.charAt(index) == gameQuote.charAt(index)
-          ) {
-            goodText = goodText + gameQuote.charAt(index);
-            both = both + gameTextPlayer1.charAt(index);
-          } else if (gameTextPlayer1.charAt(index) == gameQuote.charAt(index)) {
-            goodText = goodText + gameQuote.charAt(index);
-          } else {
-            break;
-          }
-        }
-
-        var rest = goodText.replace(both, "");
-
-        setTextPlayer1(rest);
+      var goodTextP1 = goodString(gameTextPlayer1);
+      var goodTextP2 = goodString(gameTextPlayer2);
+      if (goodTextP1.length > goodTextP2.length) {
+        var missingQuote = gameQuote.replace(goodTextP1, "");
+        var textP1 = goodTextP1.replace(goodTextP2, "");
+        var textP2 = goodTextP2;
+        var both = goodTextP2;
+        setQuote(missingQuote);
+        setTextPlayer1(textP1);
+        setTextPlayer2(textP2);
         setBothText(both);
-        //quitarle lo restante al quote
-
-        var written = both + rest;
-        setQuote(gameQuote.replace(written, ""));
-        console.log(`PLAYER 1 >= PLAYER2`);
-        console.log("Player1: ", rest);
-        console.log("Player2: ", rest);
-        console.log("Both: ", both);
+        setGoodTextPlayer1(goodTextP1);
+        setGoodTextPlayer2(goodTextP2);
+        console.log("PLAYER 1");
+        console.log(`textP1: `, textP1);
+        console.log(`textP2: `, textP2);
+        console.log(`both: `, both);
+        console.log(`missing quote: `, missingQuote);
       } else {
-        var goodText = "";
-        var both = "";
-        for (let index = 0; index < gameTextPlayer2.length; index++) {
-          if (
-            gameTextPlayer2.charAt(index) == gameTextPlayer1.charAt(index) &&
-            gameTextPlayer2.charAt(index) == gameQuote.charAt(index)
-          ) {
-            goodText = goodText + gameQuote.charAt(index);
-            both = both + gameTextPlayer2.charAt(index);
-          } else if (gameTextPlayer2.charAt(index) == gameQuote.charAt(index)) {
-            goodText = goodText + gameQuote.charAt(index);
-          } else {
-            break;
-          }
-        }
-        var rest = goodText.replace(both, "");
-
-        setTextPlayer2(rest);
+        var missingQuote = gameQuote.replace(goodTextP2, "");
+        var textP1 = goodTextP1;
+        var textP2 = goodTextP2.replace(goodTextP1, "");
+        var both = goodTextP1;
+        setQuote(missingQuote);
+        setTextPlayer1(textP1);
+        setTextPlayer2(textP2);
         setBothText(both);
-        //quitarle lo restante al quote
-
-        var written = both + rest;
-        setQuote(gameQuote.replace(written, ""));
+        setGoodTextPlayer1(goodTextP1);
+        setGoodTextPlayer2(goodTextP2);
+        console.log("PLAYER 2");
+        console.log(`textP1: `, textP1);
+        console.log(`textP2: `, textP2);
+        console.log(`both: `, both);
+        console.log(`missing quote: `, missingQuote);
       }
     } else if (gameQuote != null) {
       if (gameTextPlayer1 != null) {
-        var goodText = "";
-        for (let index = 0; index < gameQuote.length; index++) {
-          if (gameTextPlayer1.charAt(index) === gameQuote.charAt(index)) {
-            goodText = goodText + gameTextPlayer1.charAt(index);
-          } else {
-            break;
-          }
-        }
-        setTextPlayer1(goodText);
-        setQuote(gameQuote.replace(goodText, ""));
-      }
-      if (gameTextPlayer2 != null) {
-        var goodText = "";
-        for (let index = 0; index < gameQuote.length; index++) {
-          if (gameTextPlayer2.charAt(index) === gameQuote.charAt(index)) {
-            goodText = goodText + gameTextPlayer2.charAt(index);
-          } else {
-            break;
-          }
-        }
-        setTextPlayer2(goodText);
-        setQuote(gameQuote.replace(goodText, ""));
+        console.log("test12312");
+        var goodTextP1 = goodString(gameTextPlayer1);
+        setTextPlayer1(goodTextP1);
+      } else {
+        var goodTextP2 = goodString(gameTextPlayer2);
+        setTextPlayer2(goodTextP2);
       }
     }
   }, [gameTextPlayer1, gameTextPlayer2]);
 
   var goodString = (text) => {
-    var result = "";
-    for (let index = 0; index < gameQuote.length; index++) {}
+    if (gameQuote != null) {
+      var result = "";
+      for (let index = 0; index < gameQuote.length; index++) {
+        if (text.charAt(index) === gameQuote.charAt(index)) {
+          result = result + text.charAt(index);
+        } else {
+          break;
+        }
+      }
+      return result;
+    }
+    return "";
+  };
+
+  var getLongerGoodText = () => {
+    if (goodTextPlayer1.length > goodTextPlayer2.length) {
+      console.log(textPlayer1);
+      return textPlayer1;
+    }
+    if (goodTextPlayer2.length > goodTextPlayer1.length) {
+      console.log(textPlayer2);
+      return textPlayer2;
+    }
+    return null;
   };
 
   return loading ? (
@@ -200,11 +189,13 @@ const Playground = (props) => {
             <span id="both">{bothText}</span>
 
             <span
-              id={textPlayer1.length >= textPlayer2 ? "player1" : "player2"}
+              id={
+                goodTextPlayer1.length >= goodTextPlayer2.length
+                  ? "player1"
+                  : "player2"
+              }
             >
-              {textPlayer1.length >= textPlayer2.length
-                ? textPlayer1
-                : textPlayer2}
+              {getLongerGoodText()}
             </span>
 
             <span id="general">{quote}</span>
