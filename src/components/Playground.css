@@ -7,7 +7,13 @@ body {
 }
 
 .paragraph {
-  padding-top: 10px;
+  padding: 5px;
+  margin-top: 10px;
+  word-wrap: break;
+  background-color: #359b9a;
+  height: 30%;
+  margin-bottom: 10px;
+  font-size: 25px;
 }
 
 .paragraph-textarea {
@@ -35,4 +41,15 @@ textarea {
   height: 30%;
   background-color: #344463;
   color: white;
+}
+
+#player1 {
+  color: red;
+}
+
+#both {
+  color: pink;
+}
+#player2 {
+  color: blue;
 }
