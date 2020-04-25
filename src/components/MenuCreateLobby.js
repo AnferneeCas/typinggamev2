@@ -13,6 +13,7 @@ const MenuCreateLobby = (props) => {
       //error de password
     } else {
       console.log("empiza la creacion");
+
       //crea lobby en db
       firebase.db
         .ref("lobbies")
