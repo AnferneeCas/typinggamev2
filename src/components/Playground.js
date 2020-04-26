@@ -23,6 +23,7 @@ const Playground = (props) => {
   var [gameTextPlayer2, setGameTextPlayer2] = useState("");
   var [goodTextPlayer1, setGoodTextPlayer1] = useState("");
   var [goodTextPlayer2, setGoodTextPlayer2] = useState("");
+  var [status, setStatus] = useState("");
   useEffect(() => {
     if (username !== null) {
       var game = firebase.db
@@ -47,6 +48,7 @@ const Playground = (props) => {
 
           snapshot.ref.on("value", (snapshot) => {
             var lobbydata = snapshot.val();
+
             setPlayer1(
               lobbydata.player1 != undefined
                 ? lobbydata.player1
@@ -64,8 +66,21 @@ const Playground = (props) => {
             if (lobbydata.textPlayer2 !== undefined)
               setGameTextPlayer2(lobbydata.textPlayer2);
             if (gameQuote === null) setGameQuote(lobbydata.quote);
+            if (lobbydata.quote != undefined) {
+            }
 
-            setLoading(false);
+            if (lobbydata.countDown === 0) {
+              setLoading(false);
+              document.querySelector("h1").innerHTML = "READY";
+              document.querySelector(".banner").classList.add("show");
+            } else if (lobbydata.countDown === 1) {
+              document.querySelector("h1").innerHTML = "SET";
+            } else if (lobbydata.countDown === 2) {
+              document.querySelector("h1").innerHTML = "TYPE!";
+              document.querySelector(".banner").classList.remove("show");
+              setStatus("playing");
+              document.getElementById("textareainput").click();
+            }
           });
 
           currentPlayer == 1
@@ -136,7 +151,6 @@ const Playground = (props) => {
       }
     } else if (gameQuote != null) {
       if (gameTextPlayer1 != null) {
-        console.log("test12312");
         var goodTextP1 = goodString(gameTextPlayer1);
         setTextPlayer1(goodTextP1);
       } else {
@@ -177,6 +191,10 @@ const Playground = (props) => {
     <LoadingAnimation></LoadingAnimation>
   ) : (
     <div className="main">
+      <div className="banner showMe">
+        <h1></h1>
+      </div>
+
       <div className="container container-playground">
         <div
           className="paragraph"
@@ -200,49 +218,27 @@ const Playground = (props) => {
 
             <span id="general">{quote}</span>
           </Fragment>
-
-          {/* {textPlayer1.length >= textPlayer2.length ? (
-            <Fragment>
-              <span id="both">{bothText}</span>
-              <span id="player1">{textPlayer1}</span>
-              <span id="player2">{textPlayer2}</span>
-              <span id="general">{quote}</span>
-            </Fragment>
-          ) : (
-            <Fragment>
-              <span id="both">{bothText}</span>
-              <span id="player2">{textPlayer2}</span>
-              <span id="player1">{textPlayer1}</span>
-              <span id="general">{quote}</span>
-            </Fragment>
-          )} */}
-
-          {/* <textarea
-            rows={12}
-            readOnly={true}
-            className="paragraph-textarea"
-            value={quote}
-            disabled
-            onCopy={(e) => {
-              e.preventDefault();
-              console.log("cheaterrr");
-            }}
-          ></textarea> */}
         </div>
         <div className="match-label">
           <div className="row">
-            <div className="col-md-5">{player1}</div>
-            <div className="col-md-2">
+            <div className="col-md-5" style={{ position: "inherit" }}>
+              {player1}
+            </div>
+            <div className="col-md-2" style={{ position: "inherit" }}>
               <b>VS</b>
             </div>
-            <div className="col-md-5">{player2}</div>
+            <div className="col-md-5" style={{ position: "inherit" }}>
+              {player2}
+            </div>
           </div>
         </div>
         <div className="textarea">
           <textarea
+            id="textareainput"
             rows={12}
             placeholder={"Write here"}
             className="textarea-input"
+            disabled={status === "playing" ? false : true}
             onChange={async (e) => {
               if (currentPlayer == 1) {
                 firebase.db.ref("lobbies").child(lobbyId).update({

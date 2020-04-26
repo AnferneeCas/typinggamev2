@@ -29,10 +29,15 @@ exports.LobbyCreation = functions.database
       });
     var random = Math.floor(Math.random() * (100 - 0 + 1)) + 0;
     console.log(response[1].text);
-
-    return snapshot.ref.update({
+    await admin
+      .database()
+      .ref("countdown")
+      .child(context.params.id)
+      .set({ status: "counting" });
+    await snapshot.ref.update({
       quote: response[random].text,
     });
+    return true;
 
     // You must return a Promise when performing asynchronous tasks inside a Functions such as
     // writing to the Firebase Realtime Database.
@@ -40,14 +45,15 @@ exports.LobbyCreation = functions.database
   });
 
 exports.countDown = functions.database
-  .ref("/lobbies/{id}")
+  .ref("/countdown/{id}")
   .onUpdate(async (snapshot, context) => {
     // Grab the current value of what was written to the Realtime Database.
     const data = snapshot.after.val();
     if (
       data.player1 !== undefined &&
       data.player2 !== undefined &&
-      data.status === undefined
+      data.status === undefined &&
+      data.quote !== undefined
     ) {
       snapshot.after.ref
         .update({ status: "counting" })

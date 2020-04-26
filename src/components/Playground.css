@@ -53,3 +53,37 @@ textarea {
 #player2 {
   color: #cbe14f;
 }
+
+.banner {
+  position: absolute;
+
+  height: 250px;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+}
+.banner2 {
+  position: absolute;
+
+  height: 250px;
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+}
+
+h1 {
+  font-size: inherit;
+}
+
+.showMe {
+  transition: opacity 0.8s;
+  -webkit-transition: opacity 0.8s;
+  opacity: 0;
+}
+.show {
+  opacity: 1 !important;
+}
