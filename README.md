@@ -5,3 +5,7 @@ This is a small fun project created during quarentine, was inspirated by those o
 ### Development
 
 This project was develop using ReactJs for the front-end and Firebase Realtime Database and Google Cloud Functions for the backend.
+
+### Live Demo
+
+You can play the live demo here: https://typinggamev2.web.app/

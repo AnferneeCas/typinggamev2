@@ -3,10 +3,10 @@ import "firebase/auth";
 import "firebase/database";
 const axios = require("axios").default;
 const config = {
-  apiKey: "AIzaSyAO7Opd3kKUYrHS32RfwXVJTcsv7BAzoxg",
-  authDomain: "typinggamev2.firebaseapp.com",
-  databaseURL: "https://typinggamev2.firebaseio.com/",
-  storageBucket: "typinggamev2",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DB_UR,
+  storageBucket: process.env.REACT_APP_PROJECT_ID,
 };
 
 class Firebase {
