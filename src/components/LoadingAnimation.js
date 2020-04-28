@@ -1,5 +1,5 @@
 import React from "react";
-const LaodingAnimation = () => {
+const LaodingAnimation = ({ text }) => {
   return (
     <div className="main d-flex justify-content-center ">
       <div
@@ -9,6 +9,12 @@ const LaodingAnimation = () => {
       >
         <span className="sr-only">Loading...</span>
       </div>
+      <span
+        className="align-self-center"
+        style={{ position: "absolute", color: "white" }}
+      >
+        {text}
+      </span>
     </div>
   );
 };

@@ -1,11 +1,12 @@
 import React, { useState, Fragment } from "react";
 import firebase from "../firebase";
 import { withRouter } from "react-router-dom";
+import LoadingAnimation from "./LoadingAnimation";
 const MenuCreateLobby = (props) => {
   const [selected, setSelected] = useState("publica");
   const [lobbyName, setLobbyName] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const onCreateLobby = () => {
     if (lobbyName === "") {
       //error de nombre del lobby
@@ -14,20 +15,27 @@ const MenuCreateLobby = (props) => {
     } else {
       console.log("empiza la creacion");
 
+      setLoading(true);
       //crea lobby en db
       firebase.db
         .ref("lobbies")
         .push({ nombre: lobbyName, tipo: selected, password: password })
         .then((result) => {
           console.log(result.key);
-          props.history.push(`/game/${result.key}`);
+          result.ref.on("value", (snapshot) => {
+            if (snapshot.val().quote != undefined) {
+              props.history.push(`/game/${result.key}`);
+            }
+          });
         })
         .catch((error) => {
           console.log(error);
         });
     }
   };
-  return (
+  return loading ? (
+    <LoadingAnimation></LoadingAnimation>
+  ) : (
     <div className="container  d-flex justify-content-center ">
       <div className="button-container align-self-center">
         <div className="row">
@@ -51,8 +59,8 @@ const MenuCreateLobby = (props) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-6">
-            <div
+          {/* <div className="col-6"> */}
+          {/* <div
               className="btn-group btn-group-toggle"
               style={{ width: "inherit" }}
               data-toggle="buttons"
@@ -93,7 +101,7 @@ const MenuCreateLobby = (props) => {
                 Privada
               </label>
             </div>
-          </div>
+          </div> */}
           {selected === "privada" ? (
             <Fragment>
               <div className="col-6">
@@ -113,13 +121,24 @@ const MenuCreateLobby = (props) => {
                 <button className="btn btn-info" onClick={onCreateLobby}>
                   PLAY!
                 </button>
+                <label>
+                  To play with your friends with should share the URL with them,
+                  once it is updated
+                </label>
               </div>
             </Fragment>
           ) : (
-            <div className="col-6">
+            <div className="col-12">
               <button className="btn btn-info" onClick={onCreateLobby}>
                 PLAY!
               </button>
+
+              <div class="alert alert-secondary" role="alert">
+                <label>
+                  To play with your friends with should share the URL with them,
+                  once it is updated.
+                </label>
+              </div>
             </div>
           )}
         </div>

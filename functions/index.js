@@ -52,15 +52,14 @@ exports.countDown = functions.database
     if (
       data.player1 !== undefined &&
       data.player2 !== undefined &&
-      data.status === undefined &&
-      data.quote !== undefined
+      data.countDown === undefined
     ) {
       snapshot.after.ref
         .update({ status: "counting" })
         .then(async () => {
           var times = 0;
           var interval = setInterval(async () => {
-            if (times < 3) {
+            if (times < 4) {
               await snapshot.after.ref.update({ countDown: times });
               times++;
             } else {
@@ -74,6 +73,90 @@ exports.countDown = functions.database
           console.log(error);
         });
     }
+  });
+
+exports.queue = functions.database
+  .ref("/queue/{id}")
+  .onCreate(async (snapshot, context) => {
+    var newPlayer = context.params.id;
+    await admin
+      .database()
+      .ref("queue")
+      .once("value", async (snapshot) => {
+        var data = snapshot.val();
+        data = Object.keys(data).map((key) => {
+          var obj = data[key];
+          obj.id = key;
+          return obj;
+        });
+
+        if (data.length > 1) {
+          var idplayer1 = "";
+          var idplayer2 = "";
+          for (let index = 0; index < data.length; index++) {
+            if (data[index].status === undefined) {
+              if (idplayer1 === "") {
+                idplayer1 = data[index].id;
+              } else if (idplayer2 === "") {
+                idplayer2 = data[index].id;
+              } else {
+                break;
+              }
+            }
+          }
+
+          if (idplayer1 !== "" && idplayer2 !== "") {
+            var result = await admin
+              .database()
+              .ref("lobbies")
+              .push({ nombre: "matchmaking lobby" });
+
+            await admin
+              .database()
+              .ref("queue")
+              .child(idplayer1)
+              .update({ status: "playing", lobbyId: result.key });
+
+            setTimeout(async () => {
+              await admin
+                .database()
+                .ref("queue")
+                .child(idplayer2)
+                .update({ status: "playing", lobbyId: result.key });
+            }, 1500);
+          }
+          // await admin
+          //   .database()
+          //   .ref("lobbies")
+          //   .push({ nombre: "matchmaking lobby" })
+          //   .then(async (result) => {
+          //     return await admin
+          //       .database()
+          //       .ref("queue")
+          //       .child(data[0].id)
+          //       .update({ lobbyId: result.key })
+          //       .then(async () => {
+          //         return await admin
+          //           .database()
+          //           .ref("queue")
+          //           .child(data[1].id)
+          //           .update({ lobbyId: result.key })
+          //           .then(async () => {
+          //             await admin
+          //               .database()
+          //               .ref("queue")
+          //               .child(data[0].id)
+          //               .remove();
+          //             return await admin
+          //               .database()
+          //               .ref("queue")
+          //               .child(data[1].id)
+          //               .remove();
+          //           });
+          //       });
+          //   });
+        }
+      });
   });
 
 // //POST METHOD
@@ -98,4 +181,4 @@ exports.countDown = functions.database
 //     response.send("test");
 //   }
 //   response.status(500).send({ error: "Something is not right!" });
-// });
+// })

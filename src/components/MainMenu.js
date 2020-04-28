@@ -2,8 +2,12 @@ import React, { useContext, useState } from "react";
 //context
 import authContext from "../context/auth/authContext";
 import menusContext from "../context/menus/menusContext";
+import firebase from "../firebase";
+import LoadingAnimation from "./LoadingAnimation";
+import { withRouter } from "react-router-dom";
 //components
-const MainMenu = () => {
+
+const MainMenu = (props) => {
   var AuthContext = useContext(authContext);
   var { username } = AuthContext;
 
@@ -18,21 +22,43 @@ const MainMenu = () => {
 
   var [lookingForLobby, setLookingForLobby] = useState(false);
   const onClickJoinLobby = () => {};
-  const onClickSearchForLobby = () => {
-    showSearchLobby(true);
+  const onClickSearchForLobby = async () => {
+    // showSearchLobby(true);
+    setLookingForLobby(true);
+    var result = await firebase.db.ref("queue").push({ user: username });
+
+    result.ref.on("value", (snapshot) => {
+      var data = snapshot.val();
+      if (data != null) {
+        if (data.lobbyId != undefined) {
+          firebase.db
+            .ref("lobbies")
+            .child(data.lobbyId)
+            .on("value", (snapshot) => {
+              var tmp = snapshot.val();
+
+              if (tmp.quote !== undefined) {
+                props.history.push(`/game/${data.lobbyId}`);
+              }
+            });
+        }
+      }
+    });
   };
   const onClickCreateLobby = () => {
     showCreateLobby(true);
   };
 
-  return (
+  return lookingForLobby ? (
+    <LoadingAnimation text="searching for players..."></LoadingAnimation>
+  ) : (
     <div className="container  d-flex justify-content-center ">
       <div className="button-container align-self-center">
         <div className="row  ">
           <div className="col-12">
-            <button type="button" className="btn btn-outline-light">
+            {/* <button type="button" className="btn btn-outline-light">
               Join Lobby
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="row">
@@ -42,7 +68,7 @@ const MainMenu = () => {
               className="btn btn-outline-light"
               onClick={onClickSearchForLobby}
             >
-              Search for a lobby
+              Quick match
             </button>
           </div>
         </div>
@@ -62,4 +88,4 @@ const MainMenu = () => {
   );
 };
 
-export default MainMenu;
+export default withRouter(MainMenu);
